@@ -1,0 +1,75 @@
+[gd_scene load_steps=6 format=3 uid="uid://bisrs6mq6skm7"]
+
+[ext_resource type="Script" path="res://Camera3D.gd" id="1_gjq4h"]
+[ext_resource type="PackedScene" uid="uid://dh40ohxpxcgrg" path="res://dungeon_tile.tscn" id="2_ssdgu"]
+[ext_resource type="Script" path="res://DungeonBuilder.gd" id="3_8ck6k"]
+
+[sub_resource type="Sky" id="Sky_nyei6"]
+
+[sub_resource type="Environment" id="Environment_h4n0x"]
+background_mode = 1
+background_color = Color(0.0431373, 0.0352941, 0.188235, 1)
+background_energy_multiplier = 3.53
+sky = SubResource("Sky_nyei6")
+ambient_light_source = 2
+ambient_light_color = Color(0.027451, 0.101961, 0.184314, 1)
+ambient_light_energy = 6.39
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_h4n0x")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, -23.5, 20.5, 13.5)
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, -23.5, 20.5, 13.5)
+
+[node name="DungeonBuilder" type="Node" parent="."]
+script = ExtResource("3_8ck6k")
+layout = "#####################
+#..........#...#....#
+##########.#...#.##.#
+#...######.#.....##.#
+#...#...##.#...####.#
+#..........#...#..#.#
+#...#...#########.#.#
+######.##########.#.#
+#...................#
+#.####.############.#
+#.#...............#.#
+#.#.......#######.#.#
+#.#.......#.....#.#.#
+#.#.......#.....#.#.#
+######.########.#.#.#
+#...##.##...###.#.#.#
+#...##.##.....#.#.#.#
+#...#...#...#.....#.#
+##.##...#######.#.#.#
+##..##.##.#####.#.#.#
+###.##S##.......#.#.#
+#.#.#########.###.#.#
+#..............#..###
+#####################"
+tile_scene = ExtResource("2_ssdgu")
+
+[node name="Laby" type="Node3D" parent="DungeonBuilder"]
+
+[node name="Camera3D" type="Camera3D" parent="DungeonBuilder/Laby"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -40, 0.8, 12)
+fov = 60.0
+script = ExtResource("1_gjq4h")
+
+[node name="RayCastFront" type="RayCast3D" parent="DungeonBuilder/Laby/Camera3D"]
+target_position = Vector3(0, 0, -1.5)
+debug_shape_custom_color = Color(0.690196, 0.454902, 1, 1)
+debug_shape_thickness = 5
+
+[node name="RayCastBack" type="RayCast3D" parent="DungeonBuilder/Laby/Camera3D"]
+target_position = Vector3(0, 0, 1.5)
+debug_shape_custom_color = Color(0.690196, 0.454902, 1, 1)
+debug_shape_thickness = 5
+
+[node name="MovementTimer" type="Timer" parent="DungeonBuilder/Laby/Camera3D"]
+wait_time = 0.5
